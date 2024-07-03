@@ -5,4 +5,29 @@ public class DiscountCard {
     private int numberOfDiscountCard;
     private short discountAmount;
 
+
+    public Long getIdDiscountCard() {
+        return idDiscountCard;
+    }
+
+    public void setIdDiscountCard(Long idDiscountCard) {
+        this.idDiscountCard = idDiscountCard;
+    }
+
+    public int getNumberOfDiscountCard() {
+        return numberOfDiscountCard;
+    }
+
+    public void setNumberOfDiscountCard(int numberOfDiscountCard) {
+        this.numberOfDiscountCard = numberOfDiscountCard;
+    }
+
+    public short getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(short discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
 }

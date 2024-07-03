@@ -1,9 +1,18 @@
 package ru.clevertec.check;
 
+import ru.clevertec.check.util.FileHandler;
+import ru.clevertec.check.util.InputHandler;
+
+import java.io.IOException;
+
 public class CheckRunner {
-    public static void main(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            System.out.println(args[i]);
-        }
+    public static void main(String[] args) throws IOException {
+        args = "3-1 2-5 5-1 discountCard=1111 balanceDebitCard=100".split(" ");
+        InputHandler inputHandler = InputHandler.getInstance();
+        FileHandler fileHandler = FileHandler.getInstance();
+        inputHandler.handler(args);
+        fileHandler.handler();
+
+
     }
 }
