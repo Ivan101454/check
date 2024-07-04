@@ -26,10 +26,20 @@ public class InputHandler {
             list.add(matcherProduct.group());
         }
         if(matcherDiscount.find()) {
-            discount = matcherDiscount.group();
+            String discountTemp = matcherDiscount.group();
+            Pattern compileTemp = Pattern.compile("\\d+");
+            Matcher matcherTemp = compileTemp.matcher(discountTemp);
+            if (matcherTemp.find()) {
+                discount = matcherTemp.group();
+            }
         }
         if (matcherBalance.find()) {
-            balance = matcherBalance.group();
+            String balanceTemp = matcherBalance.group();
+            Pattern compileTemp = Pattern.compile("\\d+");
+            Matcher matcherTemp = compileTemp.matcher(balanceTemp);
+            while (matcherTemp.find()) {
+                balance = matcherTemp.group();
+            }
         }
     }
     private InputHandler() {

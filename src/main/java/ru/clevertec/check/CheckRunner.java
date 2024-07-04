@@ -1,5 +1,8 @@
 package ru.clevertec.check;
 
+import ru.clevertec.check.entity.Check;
+import ru.clevertec.check.entity.ConcreteCheckWithDiscount;
+import ru.clevertec.check.util.CheckPresentation;
 import ru.clevertec.check.util.FileHandler;
 import ru.clevertec.check.util.InputHandler;
 
@@ -12,7 +15,10 @@ public class CheckRunner {
         FileHandler fileHandler = FileHandler.getInstance();
         inputHandler.handler(args);
         fileHandler.handler();
-
+        Check check = new ConcreteCheckWithDiscount(inputHandler, fileHandler);
+        check.order();
+        System.out.println(check.toString());
+        CheckPresentation checkPresentation = new CheckPresentation(check);
 
     }
 }
