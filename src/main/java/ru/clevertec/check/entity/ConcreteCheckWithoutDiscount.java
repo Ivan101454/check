@@ -7,31 +7,25 @@ import ru.clevertec.check.util.InputHandler;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-public class ConcreteCheckWithDiscount extends Check {
+public class ConcreteCheckWithoutDiscount extends Check {
     private InputHandler inputHandler;
     private FileHandler fileHandler;
 
-    public ConcreteCheckWithDiscount(InputHandler inputHandler, FileHandler fileHandler) {
+    public ConcreteCheckWithoutDiscount(InputHandler inputHandler, FileHandler fileHandler) {
         this.inputHandler = inputHandler;
         this.fileHandler = fileHandler;
     }
 
     @Override
     public void createCheck() {
-        String discount = inputHandler.getDiscount();
         String balance = inputHandler.getBalance();
         List<String> purchase = inputHandler.getPurchase();
 
-
-        Map<Integer, DiscountCard> mapDiscount = fileHandler.getMapDiscount();
         Map<Long, Product> mapProduct = fileHandler.getMapProduct();
-        DiscountCard discountCard = new DiscountCard();
-        discountCard.setDiscountAmount((short) 2);
-        if(mapDiscount.get(Integer.parseInt(discount)) != null) {
-            discountCard = mapDiscount.get(Integer.parseInt(discount));
-        }
 
         DebitCard debitCard = new DebitCard();
         debitCard.setBalanceDebitCard(BigDecimal.valueOf(Double.parseDouble(balance)));
@@ -52,7 +46,7 @@ public class ConcreteCheckWithDiscount extends Check {
 
         super.setLocalDateTime(LocalDateTime.now());
         super.setProducts(temp);
-        super.setDiscountCard(discountCard);
+        super.setDiscountCard(null);
 
         calculation();
     }
@@ -65,11 +59,10 @@ public class ConcreteCheckWithDiscount extends Check {
         List<ProductInBascket> products = getProducts();
 
 
-
-        BigDecimal discountValue = BigDecimal.valueOf(super.getDiscountCard().getDiscountAmount()).divide(BigDecimal.valueOf(100));
+        BigDecimal discountValue = BigDecimal.valueOf(0);
         for (ProductInBascket product : products) {
             BigDecimal discountValueTemp = discountValue;
-            if(product.isWholesaleProduct() && product.getQuantity() >= 5) {
+            if (product.isWholesaleProduct() && product.getQuantity() >= 5) {
                 discountValueTemp = BigDecimal.valueOf(0.1);
             }
             BigDecimal itemCostWithoutDiscount = BigDecimal.valueOf(product.getQuantity()).multiply(product.getProductPrice());
@@ -88,3 +81,5 @@ public class ConcreteCheckWithDiscount extends Check {
         super.setTotalWithDiscount(totalWithDiscount.setScale(2, RoundingMode.HALF_UP));
     }
 }
+
+

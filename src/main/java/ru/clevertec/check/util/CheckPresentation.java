@@ -21,7 +21,9 @@ public class CheckPresentation {
 
 
     public String display() {
-        result = getHead() + getGoods() + getDiscount() +getConclusion();
+        if(check.getDiscountCard() != null) {
+            result = getHead() + getGoods() + getDiscount() +getConclusion();
+        } else result = getHead() + getGoods() + getConclusion();
         return result;
     }
 
@@ -44,7 +46,7 @@ public class CheckPresentation {
                     pib.getProductPrice(), pib.getDiscount(), pib.getTotal());
             sb.append(temp);
         }
-        return sb.toString();
+        return sb.toString() + "\n";
     }
     public String getDiscount() {
         String dicount = """
@@ -67,7 +69,4 @@ public class CheckPresentation {
         Path output = Path.of("result.csv");
         Files.writeString(output, display());
     }
-
-
-
 }

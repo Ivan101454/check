@@ -18,9 +18,9 @@ public class InputHandler {
         String str = stringBuilder.toString().trim();
         Pattern patternProduct = Pattern.compile("\\d-\\d");
         Matcher matcherProduct = patternProduct.matcher(str);
-        Pattern patternDiscount = Pattern.compile("discountCard=\\d{4}");
+        Pattern patternDiscount = Pattern.compile("discountCard=\\d*");
         Matcher matcherDiscount = patternDiscount.matcher(str);
-        Pattern patternBalance = Pattern.compile("balanceDebitCard=\\d{3}");
+        Pattern patternBalance = Pattern.compile("balanceDebitCard=\\d*");
         Matcher matcherBalance = patternBalance.matcher(str);
         while (matcherProduct.find()) {
             list.add(matcherProduct.group());
