@@ -17,8 +17,8 @@ public class CheckRunner {
         fileHandler.handler();
         Check check = new ConcreteCheckWithDiscount(inputHandler, fileHandler);
         check.order();
-        System.out.println(check.toString());
         CheckPresentation checkPresentation = new CheckPresentation(check);
+        checkPresentation.writeToFile();
 
     }
 }
