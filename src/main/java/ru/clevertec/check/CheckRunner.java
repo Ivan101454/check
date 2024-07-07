@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class CheckRunner {
     public static void main(String[] args) throws IOException {
-        args = "3-1 2-5 5-1  balanceDebitCard=100".split(" ");
+        args = "3-1 2-5 5-1 discountCard=1111 balanceDebitCard=100".split(" ");
         InputHandler inputHandler = InputHandler.getInstance();
         FileHandler fileHandler = FileHandler.getInstance();
         inputHandler.handler(args);

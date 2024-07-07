@@ -1,17 +1,23 @@
 package ru.clevertec.check.entity;
 
 import ru.clevertec.check.builder.ProductBuilderInBasket;
+import ru.clevertec.check.exception.CustomException;
+import ru.clevertec.check.exception.TextErrorException;
+import ru.clevertec.check.exception.WriteError;
 import ru.clevertec.check.util.FileHandler;
 import ru.clevertec.check.util.InputHandler;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class ConcreteCheckWithDiscount extends Check {
     private InputHandler inputHandler;
     private FileHandler fileHandler;
+    private DebitCard debitCard;
 
     public ConcreteCheckWithDiscount(InputHandler inputHandler, FileHandler fileHandler) {
         this.inputHandler = inputHandler;
@@ -19,7 +25,7 @@ public class ConcreteCheckWithDiscount extends Check {
     }
 
     @Override
-    public void createCheck() {
+    public void createCheck() throws IOException {
         String discount = inputHandler.getDiscount();
         String balance = inputHandler.getBalance();
         List<String> purchase = inputHandler.getPurchase();
@@ -33,13 +39,20 @@ public class ConcreteCheckWithDiscount extends Check {
             discountCard = mapDiscount.get(Integer.parseInt(discount));
         }
 
-        DebitCard debitCard = new DebitCard();
+        debitCard = new DebitCard();
         debitCard.setBalanceDebitCard(BigDecimal.valueOf(Double.parseDouble(balance)));
 
         List<ProductInBascket> temp = new ArrayList<>();
         for (String product : purchase) {
             String[] split = product.split("");
             Product prod = mapProduct.get(Long.parseLong(split[0]));
+            if(prod == null) {
+                try {
+                    throw new CustomException(TextErrorException.BAD_REQUEST);
+                } catch (CustomException e) {
+                    new WriteError(e).writeFile();
+                }
+            }
             ProductInBascket bascket = ProductBuilderInBasket.builder()
                     .setId(prod.getProductId())
                     .setDescription(prod.getProductDescription())
@@ -54,10 +67,14 @@ public class ConcreteCheckWithDiscount extends Check {
         super.setProducts(temp);
         super.setDiscountCard(discountCard);
 
-        calculation();
+        try {
+            calculation();
+        } catch (CustomException e) {
+           new WriteError(e).writeFile();
+        }
     }
 
-    public void calculation() {
+    public void calculation() throws CustomException {
         BigDecimal totalPrice = BigDecimal.ZERO;
         BigDecimal totalDiscount = BigDecimal.ZERO;
         BigDecimal totalWithDiscount = BigDecimal.ZERO;
@@ -83,8 +100,12 @@ public class ConcreteCheckWithDiscount extends Check {
             totalDiscount = totalDiscount.add(itemDiscount);
             totalWithDiscount = totalWithDiscount.add(itemCost);
         }
+        if (debitCard.getBalanceDebitCard().subtract(totalWithDiscount).compareTo(BigDecimal.ZERO) < 0) {
+            throw new CustomException(TextErrorException.NOT_ENOUGH_MONEY);
+        }
         super.setTotalPrice(totalPrice.setScale(2, RoundingMode.HALF_UP));
         super.setTotalDiscount(totalDiscount.setScale(2, RoundingMode.HALF_UP));
         super.setTotalWithDiscount(totalWithDiscount.setScale(2, RoundingMode.HALF_UP));
+
     }
 }

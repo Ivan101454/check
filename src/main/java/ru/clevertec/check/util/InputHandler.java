@@ -1,5 +1,10 @@
 package ru.clevertec.check.util;
 
+import ru.clevertec.check.exception.CustomException;
+import ru.clevertec.check.exception.TextErrorException;
+import ru.clevertec.check.exception.WriteError;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,7 +15,7 @@ public class InputHandler {
     private List<String> list = new ArrayList<>();
     private String discount;
     private String balance;
-    public void handler(String[] mas) {
+    public void handler(String[] mas) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < mas.length; i++) {
             stringBuilder.append(mas[i] + " ");
@@ -25,6 +30,15 @@ public class InputHandler {
         while (matcherProduct.find()) {
             list.add(matcherProduct.group());
         }
+
+        if (list.isEmpty()) {
+            try {
+                throw new CustomException(TextErrorException.BAD_REQUEST);
+            } catch (CustomException e) {
+                new WriteError(e).writeFile();
+            }
+        }
+
         if(matcherDiscount.find()) {
             String discountTemp = matcherDiscount.group();
             Pattern compileTemp = Pattern.compile("\\d+");
@@ -33,6 +47,7 @@ public class InputHandler {
                 discount = matcherTemp.group();
             }
         }
+
         if (matcherBalance.find()) {
             String balanceTemp = matcherBalance.group();
             Pattern compileTemp = Pattern.compile("\\d+");

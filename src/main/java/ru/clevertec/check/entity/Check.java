@@ -3,6 +3,7 @@ package ru.clevertec.check.entity;
 import ru.clevertec.check.util.FileHandler;
 import ru.clevertec.check.util.InputHandler;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,13 +17,13 @@ public abstract class Check {
     private BigDecimal totalWithDiscount;
 
 
-    public Check order() {
+    public Check order() throws IOException {
         createCheck();
 
         return this;
     }
 
-    public abstract void createCheck();
+    public abstract void createCheck() throws IOException;
 
 
     public LocalDateTime getLocalDateTime() {
