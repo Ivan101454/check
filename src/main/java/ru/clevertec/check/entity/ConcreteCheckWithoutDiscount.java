@@ -11,9 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConcreteCheckWithoutDiscount extends Check {
     private InputHandler inputHandler;
@@ -76,9 +74,20 @@ public class ConcreteCheckWithoutDiscount extends Check {
 
 
         BigDecimal discountValue = BigDecimal.valueOf(0);
+        HashMap<Long, Product> productMap = new HashMap<>();
+        for (ProductInBascket product : products) {
+            if(productMap.containsKey(product.getProductId())) {
+                int quantityOld = productMap.get(product.getProductId()).getQuantity();
+                int quantityNew = product.getQuantity();
+                int sum = quantityNew + quantityOld;
+                productMap.put(product.getProductId(), ProductBuilderInBasket.builder().setQuantity(sum).build());
+            } else
+            productMap.put(product.getProductId(), product);
+        }
+
         for (ProductInBascket product : products) {
             BigDecimal discountValueTemp = discountValue;
-            if (product.isWholesaleProduct() && product.getQuantity() >= 5) {
+            if (product.isWholesaleProduct() && productMap.get(product.getProductId()).getQuantity() >= 5) {
                 discountValueTemp = BigDecimal.valueOf(0.1);
             }
             BigDecimal itemCostWithoutDiscount = BigDecimal.valueOf(product.getQuantity()).multiply(product.getProductPrice());
