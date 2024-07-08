@@ -3,7 +3,6 @@ package ru.clevertec.check.exception;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.SplittableRandom;
 
 public class WriteError {
     private Path output = Path.of("result.csv");
