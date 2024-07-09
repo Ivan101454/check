@@ -24,5 +24,6 @@ public class CheckRunner {
         check.order();
         CheckPresentation checkPresentation = new CheckPresentation(check);
         checkPresentation.writeToFile();
+        System.out.println(checkPresentation.toString());
     }
 }

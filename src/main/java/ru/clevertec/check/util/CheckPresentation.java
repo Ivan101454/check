@@ -69,4 +69,11 @@ public class CheckPresentation {
         Path output = Path.of("result.csv");
         Files.writeString(output, display());
     }
+
+    @Override
+    public String toString() {
+        return "CheckPresentation{" +
+                "result='" + result + '\'' +
+                '}';
+    }
 }
