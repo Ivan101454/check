@@ -11,10 +11,11 @@ import java.io.IOException;
 
 public class CheckRunner {
     public static void main(String[] args) throws IOException {
+        args = new String[]{"3-1 2-1 2-1 5-1 2-3 discountCard=1111 balanceDebitCard=100  pathToFile=src/main/resources/products.csv saveToFile=result.csv"};
 
-//        args = "3-1 2-5 5-1 discountCard=1111 balanceDebitCard=100".split(" ");
         InputHandler inputHandler = InputHandler.getInstance();
         FileHandler fileHandler = FileHandler.getInstance();
+        fileHandler.setInputHandler(inputHandler);
         inputHandler.handler(args);
         fileHandler.handler();
         Check check;
@@ -23,6 +24,7 @@ public class CheckRunner {
         } else check = new ConcreteCheckWithoutDiscount(inputHandler, fileHandler);
         check.order();
         CheckPresentation checkPresentation = new CheckPresentation(check);
-        checkPresentation.writeToFile();
+        checkPresentation.writeToFile(inputHandler.getSaveToFile());
+        System.out.println(checkPresentation.toString());
     }
 }

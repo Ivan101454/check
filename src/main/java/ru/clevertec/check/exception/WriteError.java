@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class WriteError {
-    private Path output = Path.of("result.csv");
+    private static Path output = Path.of("result.csv");
     private Exception error;
     private String errorOut;
     public WriteError(Exception error) {
@@ -21,5 +21,9 @@ public class WriteError {
     public void writeFile() throws IOException {
         setError();
         Files.writeString(output, errorOut);
+    }
+
+    public static void setOutput(String output) {
+        WriteError.output = Path.of(output);
     }
 }

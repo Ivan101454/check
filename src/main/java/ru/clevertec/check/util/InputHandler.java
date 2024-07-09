@@ -15,6 +15,9 @@ public class InputHandler {
     private List<String> list = new ArrayList<>();
     private String discount;
     private String balance;
+    private String pathToFile;
+    private String saveToFile;
+
     public void handler(String[] mas) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < mas.length; i++) {
@@ -27,6 +30,12 @@ public class InputHandler {
         Matcher matcherDiscount = patternDiscount.matcher(str);
         Pattern patternBalance = Pattern.compile("balanceDebitCard=\\d*");
         Matcher matcherBalance = patternBalance.matcher(str);
+
+        Pattern patternPathToFile = Pattern.compile("pathToFile=\\S+");
+        Matcher matcherPathToFile = patternPathToFile.matcher(str);
+        Pattern patternSaveToFile = Pattern.compile("saveToFile=\\S+");
+        Matcher matcherSaveToFile = patternSaveToFile.matcher(str);
+
         while (matcherProduct.find()) {
             list.add(matcherProduct.group());
         }
@@ -38,8 +47,32 @@ public class InputHandler {
                 new WriteError(e).writeFile();
             }
         }
+        if (matcherSaveToFile.find()) {
+            String pathTemp = matcherSaveToFile.group();
+            saveToFile = pathTemp.substring(11).trim();
+            WriteError.setOutput(saveToFile);
+        } else {
+            try {
+                throw new CustomException(TextErrorException.BAD_REQUEST);
+            } catch (CustomException e) {
+                new WriteError(e).writeFile();
+            }
+        }
 
-        if(matcherDiscount.find()) {
+
+        if (matcherPathToFile.find()) {
+            String pathTemp = matcherPathToFile.group();
+            pathToFile = pathTemp.substring(11).trim();
+        } else {
+            try {
+                throw new CustomException(TextErrorException.BAD_REQUEST);
+            } catch (CustomException e) {
+                new WriteError(e).writeFile();
+            }
+        }
+
+
+        if (matcherDiscount.find()) {
             String discountTemp = matcherDiscount.group();
             Pattern compileTemp = Pattern.compile("\\d+");
             Matcher matcherTemp = compileTemp.matcher(discountTemp);
@@ -57,14 +90,16 @@ public class InputHandler {
             }
         }
     }
+
     private InputHandler() {
 
     }
+
     public static InputHandler getInstance() {
         return INPUTHANDLER;
     }
 
-    public List<String> getPurchase () {
+    public List<String> getPurchase() {
         return list;
     }
 
@@ -74,5 +109,13 @@ public class InputHandler {
 
     public String getBalance() {
         return balance;
+    }
+
+    public String getPathToFile() {
+        return pathToFile;
+    }
+
+    public String getSaveToFile() {
+        return saveToFile;
     }
 }

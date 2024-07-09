@@ -65,8 +65,18 @@ public class CheckPresentation {
         return conclution;
     }
 
-    public void writeToFile() throws IOException {
-        Path output = Path.of("result.csv");
+    public void writeToFile(String out) throws IOException {
+        Path output;
+        if(out.isEmpty()) {
+             output = Path.of("result.csv");
+        } else output = Path.of(out);
         Files.writeString(output, display());
+    }
+
+    @Override
+    public String toString() {
+        return "CheckPresentation{" +
+                "result='" + result + '\'' +
+                '}';
     }
 }

@@ -1,15 +1,12 @@
 package ru.clevertec.check.util;
 
 import ru.clevertec.check.builder.DiscountCardBuilder;
-import ru.clevertec.check.builder.IProductBuilder;
-import ru.clevertec.check.builder.ProductBuilderInBasket;
 import ru.clevertec.check.builder.ProductBuilderInStock;
 import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.entity.Product;
 import ru.clevertec.check.entity.ProductInStock;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -19,8 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 public class FileHandler {
+    private InputHandler inputHandler;
     private static final FileHandler FILEHANDLER = new FileHandler();
-    private String pathFileProduct = "./src/main/resources/products.csv";
+    private String pathFileProduct;
     private String pathFileDiscount = "./src/main/resources/discountCards.csv";
     private List<String> stringsProducts = new ArrayList<>();
     private List<String> stringsDiscount = new ArrayList<>();
@@ -40,10 +38,10 @@ public class FileHandler {
     }
 
     private FileHandler() {
-
     }
 
     public void handler() throws IOException {
+        pathFileProduct = inputHandler.getPathToFile();
         try (BufferedReader products = new BufferedReader(new FileReader(pathFileProduct));
              BufferedReader discount = new BufferedReader(new FileReader(pathFileDiscount))) {
             String tempProduct;
@@ -76,7 +74,9 @@ public class FileHandler {
                 mapDiscount.put(discountCard.getNumberOfDiscountCard(), discountCard);
             }
         }
+    }
 
-
+    public void setInputHandler(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }
