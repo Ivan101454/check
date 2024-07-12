@@ -41,12 +41,13 @@ public class FileHandler {
     }
 
     public void handler() throws IOException {
-        try (BufferedReader products = new BufferedReader(new FileReader(pathFileProduct));
+        try (
              BufferedReader discount = new BufferedReader(new FileReader(pathFileDiscount))) {
-            String tempProduct;
-            while ((tempProduct = products.readLine()) != null) {
-                stringsProducts.add(tempProduct);
-            }
+//            String tempProduct;
+//            while ((tempProduct = products.readLine()) != null) {
+//                stringsProducts.add(tempProduct);
+//            }
+
             String tempDiscount;
             while ((tempDiscount=discount.readLine())!= null) {
                 stringsDiscount.add(tempDiscount);
