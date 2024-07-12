@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = '21'
+    toolchain { languageVersion = JavaLanguageVersion.of(21)}
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation 'org.postgresql:postgresql:42.7.3'
+
+}

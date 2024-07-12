@@ -5,6 +5,9 @@ import ru.clevertec.check.exception.TextErrorException;
 import ru.clevertec.check.exception.WriteError;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,15 +18,18 @@ public class InputHandler {
     private List<String> list = new ArrayList<>();
     private String discount;
     private String balance;
-    private String pathToFile;
     private String saveToFile;
+    private String datasourceUrl;
+    private String datasourceUsername;
+    private String datasourcePassword;
+
 
     public void handler(String[] mas) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < mas.length; i++) {
             stringBuilder.append(mas[i] + " ");
         }
-        String str = stringBuilder.toString().trim();
+        String str = stringBuilder.toString();
         Pattern patternProduct = Pattern.compile("\\d-\\d");
         Matcher matcherProduct = patternProduct.matcher(str);
         Pattern patternDiscount = Pattern.compile("discountCard=\\d*");
@@ -31,10 +37,53 @@ public class InputHandler {
         Pattern patternBalance = Pattern.compile("balanceDebitCard=\\d*");
         Matcher matcherBalance = patternBalance.matcher(str);
 
-        Pattern patternPathToFile = Pattern.compile("pathToFile=\\S+");
-        Matcher matcherPathToFile = patternPathToFile.matcher(str);
+
         Pattern patternSaveToFile = Pattern.compile("saveToFile=\\S+");
         Matcher matcherSaveToFile = patternSaveToFile.matcher(str);
+
+        Pattern patternDatasourceUrl = Pattern.compile("datasource.url=\\S+");
+        Matcher matcherDatasourceUrl = patternDatasourceUrl.matcher(str);
+        Pattern patternDatasourceUsername = Pattern.compile("datasource.username=\\S+");
+        Matcher matcherDatasourceUsername = patternDatasourceUsername.matcher(str);
+        Pattern patternDatasourcePassword = Pattern.compile("datasource.password=\\S+");
+        Matcher matcherDatasourcePassword = patternDatasourcePassword.matcher(str);
+
+        if (matcherDatasourceUrl.find()) {
+            String pathTemp = matcherDatasourceUrl.group();
+            datasourceUrl = pathTemp.substring(15).trim();
+        } else {
+            try {
+                throw new CustomException(TextErrorException.BAD_REQUEST);
+            } catch (CustomException e) {
+                new WriteError(e).writeFile();
+            }
+        }
+
+        if (matcherDatasourceUsername.find()) {
+            String pathTemp = matcherDatasourceUsername.group();
+            datasourceUsername = pathTemp.substring(19).trim();
+        } else {
+            try {
+                throw new CustomException(TextErrorException.BAD_REQUEST);
+            } catch (CustomException e) {
+                new WriteError(e).writeFile();
+            }
+        }
+
+        if (matcherDatasourcePassword.find()) {
+            String pathTemp = matcherDatasourcePassword.group();
+            datasourcePassword = pathTemp.substring(19).trim();
+        } else {
+            try {
+                throw new CustomException(TextErrorException.BAD_REQUEST);
+            } catch (CustomException e) {
+                new WriteError(e).writeFile();
+            }
+        }
+
+        writePropertiesFile();
+
+
 
         while (matcherProduct.find()) {
             list.add(matcherProduct.group());
@@ -60,17 +109,6 @@ public class InputHandler {
         }
 
 
-        if (matcherPathToFile.find()) {
-            String pathTemp = matcherPathToFile.group();
-            pathToFile = pathTemp.substring(11).trim();
-        } else {
-            try {
-                throw new CustomException(TextErrorException.BAD_REQUEST);
-            } catch (CustomException e) {
-                new WriteError(e).writeFile();
-            }
-        }
-
 
         if (matcherDiscount.find()) {
             String discountTemp = matcherDiscount.group();
@@ -89,6 +127,8 @@ public class InputHandler {
                 balance = matcherTemp.group();
             }
         }
+
+
     }
 
     private InputHandler() {
@@ -111,11 +151,32 @@ public class InputHandler {
         return balance;
     }
 
-    public String getPathToFile() {
-        return pathToFile;
-    }
-
     public String getSaveToFile() {
         return saveToFile;
+    }
+
+    public String getDatasourceUrl() {
+        return datasourceUrl;
+    }
+
+    public String getDatasourceUsername() {
+        return datasourceUsername;
+    }
+
+    public String getDatasourcePassword() {
+        return datasourcePassword;
+    }
+    public void writePropertiesFile() throws IOException {
+        Path resources = Path.of("src", "main", "resources", "application.properties");
+        String url = "datasource.url=" + getDatasourceUrl();
+        String username = "datasource.username" + getDatasourceUsername();
+        String password = "datasource.password" + getDatasourcePassword();
+        String enter = """
+                %s
+                %s
+                %s
+                """.formatted(url, username, password);
+
+        Files.writeString(resources, enter);
     }
 }

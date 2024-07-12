@@ -41,7 +41,6 @@ public class FileHandler {
     }
 
     public void handler() throws IOException {
-        pathFileProduct = inputHandler.getPathToFile();
         try (BufferedReader products = new BufferedReader(new FileReader(pathFileProduct));
              BufferedReader discount = new BufferedReader(new FileReader(pathFileDiscount))) {
             String tempProduct;
@@ -76,7 +75,4 @@ public class FileHandler {
         }
     }
 
-    public void setInputHandler(InputHandler inputHandler) {
-        this.inputHandler = inputHandler;
-    }
 }
