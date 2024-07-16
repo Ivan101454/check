@@ -6,7 +6,7 @@ public class DiscountCardBuilder implements IDiscountBuilder{
     private Long idDiscountCard;
     private int numberOfDiscountCard;
     private short discountAmount;
-    public static DiscountCardBuilder builder() {
+    public DiscountCardBuilder builder() {
         return new DiscountCardBuilder();
     }
     @Override

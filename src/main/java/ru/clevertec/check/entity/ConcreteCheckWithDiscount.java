@@ -1,5 +1,6 @@
 package ru.clevertec.check.entity;
 
+import ru.clevertec.check.builder.IProductBuilder;
 import ru.clevertec.check.builder.ProductBuilderInBasket;
 import ru.clevertec.check.exception.CustomException;
 import ru.clevertec.check.exception.TextErrorException;
@@ -18,6 +19,7 @@ public class ConcreteCheckWithDiscount extends Check {
     private InputHandler inputHandler;
     private FileHandler fileHandler;
     private DebitCard debitCard;
+    private IProductBuilder iProductBuilder = new ProductBuilderInBasket();
 
     public ConcreteCheckWithDiscount(InputHandler inputHandler, FileHandler fileHandler) {
         this.inputHandler = inputHandler;
@@ -53,7 +55,7 @@ public class ConcreteCheckWithDiscount extends Check {
                     new WriteError(e).writeFile();
                 }
             }
-            ProductInBascket bascket = ProductBuilderInBasket.builder()
+            ProductInBascket bascket = (ProductInBascket) iProductBuilder.builder()
                     .setId(prod.getProductId())
                     .setDescription(prod.getProductDescription())
                     .setPrice(prod.getProductPrice())
@@ -90,7 +92,7 @@ public class ConcreteCheckWithDiscount extends Check {
                 int quantityOld = productMap.get(product.getProductId()).getQuantity();
                 int quantityNew = product.getQuantity();
                 int sum = quantityNew + quantityOld;
-                productMap.put(product.getProductId(), ProductBuilderInBasket.builder().setQuantity(sum).build());
+                productMap.put(product.getProductId(), iProductBuilder.builder().setQuantity(sum).build());
             } else
                 productMap.put(product.getProductId(), product);
         }

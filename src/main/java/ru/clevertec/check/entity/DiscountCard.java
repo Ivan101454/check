@@ -30,4 +30,12 @@ public class DiscountCard {
         this.discountAmount = discountAmount;
     }
 
+    @Override
+    public String toString() {
+        return "DiscountCard{" +
+                "idDiscountCard=" + idDiscountCard +
+                ", numberOfDiscountCard=" + numberOfDiscountCard +
+                ", discountAmount=" + discountAmount +
+                '}';
+    }
 }

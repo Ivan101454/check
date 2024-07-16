@@ -34,7 +34,7 @@ public class ProductInBascket extends Product{
 
     @Override
     public String toString() {
-        return "ProductInBascket{" +
+        return super.toString() + "ProductInBascket{" +
                 "quantityInBascket=" + quantityInBascket +
                 ", discount=" + discount +
                 ", total=" + total +

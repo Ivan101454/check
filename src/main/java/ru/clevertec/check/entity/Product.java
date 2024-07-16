@@ -44,5 +44,13 @@ public abstract class Product {
         isWholesaleProduct = wholesaleProduct;
     }
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", productDescription='" + productDescription + '\'' +
+                ", productPrice=" + productPrice +
+                ", isWholesaleProduct=" + isWholesaleProduct +
+                '}';
+    }
 }

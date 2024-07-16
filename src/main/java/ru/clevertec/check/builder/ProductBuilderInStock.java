@@ -10,7 +10,7 @@ public class ProductBuilderInStock implements IProductBuilder{
     private BigDecimal productPrice;
     private boolean isWholesaleProduct;
     private int quantity;
-    public static ProductBuilderInStock builder() {
+    public ProductBuilderInStock builder() {
         return new ProductBuilderInStock();
     }
     public ProductBuilderInStock setId(Long productId) {

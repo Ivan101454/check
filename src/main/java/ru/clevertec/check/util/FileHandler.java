@@ -1,7 +1,6 @@
 package ru.clevertec.check.util;
 
-import ru.clevertec.check.builder.DiscountCardBuilder;
-import ru.clevertec.check.builder.ProductBuilderInStock;
+import ru.clevertec.check.builder.*;
 import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.entity.Product;
 import ru.clevertec.check.entity.ProductInStock;
@@ -16,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class FileHandler {
+    private IProductBuilder iProductBuilder = new ProductBuilderInStock();
+    private IDiscountBuilder iDiscountBuilder = new DiscountCardBuilder();
     private InputHandler inputHandler;
     private static final FileHandler FILEHANDLER = new FileHandler();
     private String pathFileProduct;
@@ -54,7 +55,7 @@ public class FileHandler {
             }
             for (int i = 1; i < stringsProducts.size(); i++) {
                 String[] split = stringsProducts.get(i).trim().split(";");
-                ProductInStock product = ProductBuilderInStock.builder().
+                ProductInStock product = (ProductInStock) iProductBuilder.builder().
                         setId(Long.parseLong(split[0]))
                         .setDescription(split[1])
                         .setPrice(BigDecimal.valueOf(Double.parseDouble(split[2])))
@@ -66,7 +67,7 @@ public class FileHandler {
 
             for (int i = 1; i < stringsDiscount.size(); i++) {
                 String[] split = stringsDiscount.get(i).trim().split(";");
-                DiscountCard discountCard = DiscountCardBuilder.builder()
+                DiscountCard discountCard = iDiscountBuilder.builder()
                         .setId(Long.valueOf(split[0]))
                         .setNumberCard(Integer.parseInt(split[1]))
                         .setAmount(Short.parseShort(split[2]))

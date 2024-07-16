@@ -50,7 +50,7 @@ public class InputHandler {
 
         if (matcherDatasourceUrl.find()) {
             String pathTemp = matcherDatasourceUrl.group();
-            datasourceUrl = pathTemp.substring(15).trim();
+            datasourceUrl = pathTemp.trim();
         } else {
             try {
                 throw new CustomException(TextErrorException.BAD_REQUEST);
@@ -61,7 +61,7 @@ public class InputHandler {
 
         if (matcherDatasourceUsername.find()) {
             String pathTemp = matcherDatasourceUsername.group();
-            datasourceUsername = pathTemp.substring(19).trim();
+            datasourceUsername = pathTemp.trim();
         } else {
             try {
                 throw new CustomException(TextErrorException.BAD_REQUEST);
@@ -72,7 +72,7 @@ public class InputHandler {
 
         if (matcherDatasourcePassword.find()) {
             String pathTemp = matcherDatasourcePassword.group();
-            datasourcePassword = pathTemp.substring(19).trim();
+            datasourcePassword = pathTemp.trim();
         } else {
             try {
                 throw new CustomException(TextErrorException.BAD_REQUEST);
@@ -168,9 +168,9 @@ public class InputHandler {
     }
     public void writePropertiesFile() throws IOException {
         Path resources = Path.of("src", "main", "resources", "application.properties");
-        String url = "datasource.url=" + getDatasourceUrl();
-        String username = "datasource.username" + getDatasourceUsername();
-        String password = "datasource.password" + getDatasourcePassword();
+        String url = getDatasourceUrl();
+        String username = getDatasourceUsername();
+        String password = getDatasourcePassword();
         String enter = """
                 %s
                 %s

@@ -1,20 +1,22 @@
 package ru.clevertec.check;
 
-import ru.clevertec.check.entity.Check;
-import ru.clevertec.check.entity.ConcreteCheckWithDiscount;
-import ru.clevertec.check.entity.ConcreteCheckWithoutDiscount;
+import ru.clevertec.check.entity.*;
 import ru.clevertec.check.exception.CustomException;
 import ru.clevertec.check.exception.WriteError;
+import ru.clevertec.check.postgresCommand.IPostgresDml;
+import ru.clevertec.check.postgresCommand.PostgresDml;
+import ru.clevertec.check.postgresCommand.PostgresOperation;
 import ru.clevertec.check.util.*;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class CheckRunner {
     public static void main(String[] args) throws IOException {
-        args = "3-1 2-1 2-1 5-1 2-3 discountCard=1111 balanceDebitCard=100 saveToFile=result.csv datasource.url=jdbc:postgresql://localhost:5432/Test datasource.username=postgres datasource.password=postgres".split(" ");
+        args = "3-1 2-1 2-1 5-1 2-3 discountCard=1111 balanceDebitCard=100 saveToFile=result.csv datasource.url=jdbc:postgresql://localhost:5432/check datasource.username=postgres datasource.password=postgres".split(" ");
 
         InputHandler inputHandler = InputHandler.getInstance();
         FileHandler fileHandler = FileHandler.getInstance();
@@ -22,21 +24,17 @@ public class CheckRunner {
         PropertiesUtil.loadProperties();
         fileHandler.handler();
 
-        String sql = """
-                DROP DATABASE game;
-                """;
+        IPostgresDml iPostgresDml = new PostgresDml();
+        int numberEnterDiscout = Integer.parseInt(inputHandler.getDiscount());
 
-        try(var connection = JdbcConnectionManager.open();
-            var statement = connection.createStatement()) {
+        DiscountCard discountCardByNumber = iPostgresDml.getDiscountCardByNumber(numberEnterDiscout);
+        List<Product> productById = iPostgresDml.getProductById(List.of(1L, 2L, 3L));
+        System.out.println(discountCardByNumber.toString());
+        productById.forEach(System.out::println);
 
-            int transactionIsolation = connection.getTransactionIsolation();
-            System.out.println(transactionIsolation);
-            var executeResult = statement.execute(sql);
-            System.out.println(executeResult);
+//        var operation = PostgresOperation.createPostgresOperation();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
 
 
 //        Check check;

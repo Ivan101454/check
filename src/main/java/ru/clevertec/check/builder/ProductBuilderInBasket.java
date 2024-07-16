@@ -10,7 +10,7 @@ public class ProductBuilderInBasket implements IProductBuilder{
     private BigDecimal productPrice;
     private boolean isWholesaleProduct;
     private int quantity;
-    public static ProductBuilderInBasket builder() {
+    public ProductBuilderInBasket builder() {
         return new ProductBuilderInBasket();
     }
     public ProductBuilderInBasket setId(Long productId) {

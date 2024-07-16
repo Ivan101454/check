@@ -6,7 +6,7 @@ import ru.clevertec.check.entity.Product;
 import java.math.BigDecimal;
 
 public interface IProductBuilder {
-//    public  IProductBuilder builder();
+    public IProductBuilder builder();
     public IProductBuilder setId(Long productId);
     public IProductBuilder setDescription(String productDescription);
     public IProductBuilder setPrice(BigDecimal productPrice);
