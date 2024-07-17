@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CheckRunner {
@@ -24,13 +25,7 @@ public class CheckRunner {
         PropertiesUtil.loadProperties();
         fileHandler.handler();
 
-        IPostgresDml iPostgresDml = new PostgresDml();
-        int numberEnterDiscout = Integer.parseInt(inputHandler.getDiscount());
-
-        DiscountCard discountCardByNumber = iPostgresDml.getDiscountCardByNumber(numberEnterDiscout);
-        List<Product> productById = iPostgresDml.getProductById(List.of(1L, 2L, 3L));
-        System.out.println(discountCardByNumber.toString());
-        productById.forEach(System.out::println);
+        checkData(inputHandler);
 
 //        var operation = PostgresOperation.createPostgresOperation();
 
@@ -45,5 +40,15 @@ public class CheckRunner {
 //        CheckPresentation checkPresentation = new CheckPresentation(check);
 //        checkPresentation.writeToFile(inputHandler.getSaveToFile());
 //        System.out.println(checkPresentation.toString());
+    }
+
+    private static void checkData(InputHandler inputHandler) {
+        IPostgresDml iPostgresDml = new PostgresDml();
+        int numberEnterDiscout = Integer.parseInt(inputHandler.getDiscount());
+        DiscountCard discountCardByNumber = iPostgresDml.getDiscountCardByNumber(numberEnterDiscout);
+
+        List<Product> productById = iPostgresDml.getProductById(inputHandler.getProductId());
+        System.out.println(discountCardByNumber.toString());
+        productById.forEach(System.out::println);
     }
 }

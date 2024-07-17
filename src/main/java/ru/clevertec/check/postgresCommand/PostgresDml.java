@@ -24,9 +24,11 @@ public class PostgresDml implements IPostgresDml{
                 FROM product
                 WHERE id_product = ?
                 """;
-        try(var connection = JdbcConnectionManager.open();
+        try(var connection = JdbcConnectionManager.get();
             var preparedStatement = connection.prepareStatement(sql)) {
-
+            preparedStatement.setFetchSize(50);
+            preparedStatement.setQueryTimeout(10);
+            preparedStatement.setMaxRows(100);
 
             for (Long i: idList) {
                 preparedStatement.setLong(1, i);
@@ -56,7 +58,7 @@ public class PostgresDml implements IPostgresDml{
                 FROM discount_card
                 WHERE number_discount_card = ?;
                 """;
-        try(var connection = JdbcConnectionManager.open();
+        try(var connection = JdbcConnectionManager.get();
             var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, numberCard);
             var resultSet = preparedStatement.executeQuery();

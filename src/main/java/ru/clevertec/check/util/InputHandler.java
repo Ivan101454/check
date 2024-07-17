@@ -7,7 +7,6 @@ import ru.clevertec.check.exception.WriteError;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -171,12 +170,24 @@ public class InputHandler {
         String url = getDatasourceUrl();
         String username = getDatasourceUsername();
         String password = getDatasourcePassword();
+        String pool = "db.pool.size=5";
         String enter = """
                 %s
                 %s
                 %s
-                """.formatted(url, username, password);
+                %s
+                """.formatted(url, username, password, pool);
 
         Files.writeString(resources, enter);
+    }
+
+    public List<Long> getProductId() {
+        List<Long> purr = new ArrayList<>();
+        List<String> purchase = getPurchase();
+        for (int i = 0; i < purchase.size(); i++) {
+            String[] s = purchase.get(i).split("");
+            purr.add(Long.parseLong(s[0]));
+        }
+        return purr;
     }
 }
