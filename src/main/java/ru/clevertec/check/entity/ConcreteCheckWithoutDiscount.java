@@ -1,5 +1,6 @@
 package ru.clevertec.check.entity;
 
+import ru.clevertec.check.Dao.CrudProductInStock;
 import ru.clevertec.check.builder.IProductBuilder;
 import ru.clevertec.check.builder.ProductBuilderInBasket;
 import ru.clevertec.check.exception.CustomException;
@@ -16,13 +17,13 @@ import java.util.*;
 
 public class ConcreteCheckWithoutDiscount extends Check {
     private InputHandler inputHandler;
-    private FileHandler fileHandler;
-    private DebitCard debitCard;
+    private CrudProductInStock crudProductInStock;
     private IProductBuilder iProductBuilder = new ProductBuilderInBasket();
+    private DebitCard debitCard;
 
-    public ConcreteCheckWithoutDiscount(InputHandler inputHandler, FileHandler fileHandler) {
+    public ConcreteCheckWithoutDiscount(InputHandler inputHandler, CrudProductInStock crudProductInStock) {
         this.inputHandler = inputHandler;
-        this.fileHandler = fileHandler;
+        this.crudProductInStock = crudProductInStock;
     }
 
     @Override
@@ -30,7 +31,6 @@ public class ConcreteCheckWithoutDiscount extends Check {
         String balance = inputHandler.getBalance();
         List<String> purchase = inputHandler.getPurchase();
 
-        Map<Long, Product> mapProduct = fileHandler.getMapProduct();
 
         DebitCard debitCard = new DebitCard();
         debitCard.setBalanceDebitCard(BigDecimal.valueOf(Double.parseDouble(balance)));
@@ -38,19 +38,20 @@ public class ConcreteCheckWithoutDiscount extends Check {
         List<ProductInBascket> temp = new ArrayList<>();
         for (String product : purchase) {
             String[] split = product.split("");
-            Product prod = mapProduct.get(Long.parseLong(split[0]));
-            if(prod == null) {
+            Optional prod = crudProductInStock.findById(Long.parseLong(split[0]));
+            if(prod.isEmpty()) {
                 try {
                     throw new CustomException(TextErrorException.BAD_REQUEST);
                 } catch (CustomException e) {
                     new WriteError(e).writeFile();
                 }
             }
+            Product productPurchase = (Product) prod.get();
             ProductInBascket bascket = (ProductInBascket) iProductBuilder.builder()
-                    .setId(prod.getProductId())
-                    .setDescription(prod.getProductDescription())
-                    .setPrice(prod.getProductPrice())
-                    .setIsWholesale(prod.isWholesaleProduct())
+                    .setId(productPurchase.getProductId())
+                    .setDescription(productPurchase.getProductDescription())
+                    .setPrice(productPurchase.getProductPrice())
+                    .setIsWholesale(productPurchase.isWholesaleProduct())
                     .setQuantity(Integer.parseInt(split[2]))
                     .build();
             temp.add(bascket);

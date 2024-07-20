@@ -1,29 +1,31 @@
 package ru.clevertec.check.entity;
 
+import ru.clevertec.check.Dao.CrudDiscountCard;
+import ru.clevertec.check.Dao.CrudProductInStock;
 import ru.clevertec.check.builder.IProductBuilder;
 import ru.clevertec.check.builder.ProductBuilderInBasket;
 import ru.clevertec.check.exception.CustomException;
 import ru.clevertec.check.exception.TextErrorException;
 import ru.clevertec.check.exception.WriteError;
-import ru.clevertec.check.util.FileHandler;
 import ru.clevertec.check.util.InputHandler;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class ConcreteCheckWithDiscount extends Check {
     private InputHandler inputHandler;
-    private FileHandler fileHandler;
+    private CrudDiscountCard crudDiscountCard;
+    private CrudProductInStock crudProductInStock;
     private DebitCard debitCard;
     private IProductBuilder iProductBuilder = new ProductBuilderInBasket();
 
-    public ConcreteCheckWithDiscount(InputHandler inputHandler, FileHandler fileHandler) {
+    public ConcreteCheckWithDiscount(InputHandler inputHandler, CrudDiscountCard crudDiscountCard, CrudProductInStock crudProductInStock) {
         this.inputHandler = inputHandler;
-        this.fileHandler = fileHandler;
+        this.crudDiscountCard = crudDiscountCard;
+        this.crudProductInStock = crudProductInStock;
     }
 
     @Override
@@ -32,34 +34,32 @@ public class ConcreteCheckWithDiscount extends Check {
         String balance = inputHandler.getBalance();
         List<String> purchase = inputHandler.getPurchase();
 
-
-        Map<Integer, DiscountCard> mapDiscount = fileHandler.getMapDiscount();
-        Map<Long, Product> mapProduct = fileHandler.getMapProduct();
         DiscountCard discountCard = new DiscountCard();
         discountCard.setDiscountAmount((short) 2);
-        if(mapDiscount.get(Integer.parseInt(discount)) != null) {
-            discountCard = mapDiscount.get(Integer.parseInt(discount));
+        if (discount != null) {
+            discountCard = (DiscountCard) crudDiscountCard.findByNumber(Integer.parseInt(discount)).get();
         }
-
         debitCard = new DebitCard();
         debitCard.setBalanceDebitCard(BigDecimal.valueOf(Double.parseDouble(balance)));
 
         List<ProductInBascket> temp = new ArrayList<>();
         for (String product : purchase) {
             String[] split = product.split("");
-            Product prod = mapProduct.get(Long.parseLong(split[0]));
-            if(prod == null) {
+            Optional prod = crudProductInStock.findById(Long.parseLong(split[0]));
+            if(prod.isEmpty()) {
                 try {
                     throw new CustomException(TextErrorException.BAD_REQUEST);
                 } catch (CustomException e) {
                     new WriteError(e).writeFile();
                 }
             }
+            Product productPurchase =(Product) prod.get();
+
             ProductInBascket bascket = (ProductInBascket) iProductBuilder.builder()
-                    .setId(prod.getProductId())
-                    .setDescription(prod.getProductDescription())
-                    .setPrice(prod.getProductPrice())
-                    .setIsWholesale(prod.isWholesaleProduct())
+                    .setId(productPurchase.getProductId())
+                    .setDescription(productPurchase.getProductDescription())
+                    .setPrice(productPurchase.getProductPrice())
+                    .setIsWholesale(productPurchase.isWholesaleProduct())
                     .setQuantity(Integer.parseInt(split[2]))
                     .build();
             temp.add(bascket);
@@ -119,6 +119,5 @@ public class ConcreteCheckWithDiscount extends Check {
         super.setTotalPrice(totalPrice.setScale(2, RoundingMode.HALF_UP));
         super.setTotalDiscount(totalDiscount.setScale(2, RoundingMode.HALF_UP));
         super.setTotalWithDiscount(totalWithDiscount.setScale(2, RoundingMode.HALF_UP));
-
     }
 }

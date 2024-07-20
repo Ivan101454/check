@@ -8,7 +8,7 @@ import ru.clevertec.check.util.JdbcConnectionManager;
 import java.sql.*;
 import java.util.Optional;
 
-public class ProductInStockDao {
+public class ProductInStockDao implements CrudProductInStock<ProductInStock, Long> {
     private static final ProductInStockDao PRODUCT_DAO = new ProductInStockDao();
     private static final String DELETE_SQL = """ 
             DELETE FROM product
