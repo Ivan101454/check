@@ -1,24 +1,13 @@
 package ru.clevertec.check;
 
-import ru.clevertec.check.Dao.CrudDiscountCard;
-import ru.clevertec.check.Dao.CrudProductInStock;
-import ru.clevertec.check.Dao.DiscountCardDao;
-import ru.clevertec.check.Dao.ProductInStockDao;
+import ru.clevertec.check.dao.CrudDiscountCard;
+import ru.clevertec.check.dao.CrudProductInStock;
+import ru.clevertec.check.dao.DiscountCardDao;
+import ru.clevertec.check.dao.ProductInStockDao;
 import ru.clevertec.check.entity.*;
-import ru.clevertec.check.exception.CustomException;
-import ru.clevertec.check.exception.WriteError;
-import ru.clevertec.check.postgresCommand.IPostgresDml;
-import ru.clevertec.check.postgresCommand.PostgresDml;
-import ru.clevertec.check.postgresCommand.PostgresOperation;
 import ru.clevertec.check.util.*;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class CheckRunner {
     public static void main(String[] args) throws IOException {

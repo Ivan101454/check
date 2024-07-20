@@ -1,7 +1,7 @@
 package ru.clevertec.check.entity;
 
-import ru.clevertec.check.Dao.CrudDiscountCard;
-import ru.clevertec.check.Dao.CrudProductInStock;
+import ru.clevertec.check.dao.CrudDiscountCard;
+import ru.clevertec.check.dao.CrudProductInStock;
 import ru.clevertec.check.builder.IProductBuilder;
 import ru.clevertec.check.builder.ProductBuilderInBasket;
 import ru.clevertec.check.exception.CustomException;
@@ -54,6 +54,14 @@ public class ConcreteCheckWithDiscount extends Check {
                 }
             }
             Product productPurchase =(Product) prod.get();
+            if (Integer.parseInt(split[2]) > productPurchase.getQuantity()) {
+                try {
+                    throw new CustomException((TextErrorException.INTERNAL_SERVER_ERROR));
+                } catch (CustomException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
 
             ProductInBascket bascket = (ProductInBascket) iProductBuilder.builder()
                     .setId(productPurchase.getProductId())

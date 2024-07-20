@@ -1,4 +1,4 @@
-package ru.clevertec.check.Dao;
+package ru.clevertec.check.dao;
 
 import ru.clevertec.check.builder.ProductBuilderInStock;
 import ru.clevertec.check.entity.ProductInStock;
