@@ -1,5 +1,7 @@
 package ru.clevertec.check;
 
+import ru.clevertec.check.Dao.DiscountCardDao;
+import ru.clevertec.check.Dao.ProductInStockDao;
 import ru.clevertec.check.entity.*;
 import ru.clevertec.check.exception.CustomException;
 import ru.clevertec.check.exception.WriteError;
@@ -14,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CheckRunner {
     public static void main(String[] args) throws IOException {
@@ -25,7 +28,12 @@ public class CheckRunner {
         PropertiesUtil.loadProperties();
         fileHandler.handler();
 
-        checkData(inputHandler);
+//        checkData(inputHandler);
+        Optional<ProductInStock> product = ProductInStockDao.getProductDao().findById(2L);
+        System.out.println(product);
+
+        Optional<DiscountCard> discountCard = DiscountCardDao.getInstance().findById(2L);
+        System.out.println(discountCard);
 
 //        var operation = PostgresOperation.createPostgresOperation();
 
