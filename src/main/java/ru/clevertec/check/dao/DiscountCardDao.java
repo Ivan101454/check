@@ -122,4 +122,5 @@ public class DiscountCardDao implements CrudDiscountCard<DiscountCard, Long, Int
     public static DiscountCardDao getInstance() {
         return CARD_DAO;
     }
+
 }
