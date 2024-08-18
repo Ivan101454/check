@@ -7,7 +7,9 @@ import ru.clevertec.check.dao.ProductInStockDao;
 import ru.clevertec.check.entity.*;
 import ru.clevertec.check.util.*;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
 
 public class CheckRunner {
     public static void main(String[] args) throws IOException {
@@ -30,7 +32,10 @@ public class CheckRunner {
         CheckPresentation checkPresentation = new CheckPresentation(check);
         checkPresentation.writeToFile(inputHandler.getSaveToFile());
         System.out.println(checkPresentation.toString());
+
+
     }
+}
 
 //    private static void checkData(InputHandler inputHandler) {
 //        IPostgresDml iPostgresDml = new PostgresDml();
@@ -41,4 +46,3 @@ public class CheckRunner {
 //        System.out.println(discountCardByNumber.toString());
 //        productById.forEach(System.out::println);
 //    }
-}

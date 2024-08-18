@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="check-exp">
+    <output-path>$PROJECT_DIR$/out/artifacts/check_exp</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="check.main/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="check.main" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,18 +1,40 @@
 package ru.clevertec.check.service;
 
+import ru.clevertec.check.builder.DiscountCardBuilder;
 import ru.clevertec.check.dao.CrudDiscountCard;
+import ru.clevertec.check.dao.DiscountCardDao;
+import ru.clevertec.check.http.dto.DiscountCardDto;
 
 import java.util.Optional;
 
 public class DiscountCardService implements IDiscountCardService {
-    CrudDiscountCard crudDiscountCard;
+    private static final DiscountCardService INSTANCE = new DiscountCardService();
+    private final CrudDiscountCard crudDiscountCard = DiscountCardDao.getInstance();
 
-    public DiscountCardService(CrudDiscountCard crudDiscountCard) {
-        this.crudDiscountCard = crudDiscountCard;
+    private DiscountCardService() {
+
+    }
+
+    public DiscountCardService getInstance() {
+        return INSTANCE;
+    }
+
+    Optional findByNumber(Integer number) {
+
+        return crudDiscountCard.findByNumber(number);
     }
 
     @Override
-    public Optional findByNumber(Integer number) {
-        return crudDiscountCard.findByNumber(number);
+    public void addDiscountCart(DiscountCardDto discountCardDto) {
+        crudDiscountCard.save(new DiscountCardBuilder()
+                .builder()
+                        .setNumberCard(discountCardDto.getNumberOfDiscountCard())
+                        .setAmount((short) 2)
+                .build());
+    }
+
+    @Override
+    public Optional<DiscountCardDto> findByNumber() {
+        return Optional.empty();
     }
 }
