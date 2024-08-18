@@ -3,20 +3,28 @@ package ru.clevertec.check.http.dto;
 import java.util.Objects;
 
 public class DiscountCardDto {
-    private Long idDiscountCard;
     private int numberOfDiscountCard;
+    private short discountAmount;
 
-    public DiscountCardDto(Long idDiscountCard, int numberOfDiscountCard) {
-        this.idDiscountCard = idDiscountCard;
+    public DiscountCardDto(int numberOfDiscountCard, short discountAmount) {
         this.numberOfDiscountCard = numberOfDiscountCard;
-    }
-
-    public Long getIdDiscountCard() {
-        return idDiscountCard;
+        this.discountAmount = discountAmount;
     }
 
     public int getNumberOfDiscountCard() {
         return numberOfDiscountCard;
+    }
+
+    public void setNumberOfDiscountCard(int numberOfDiscountCard) {
+        this.numberOfDiscountCard = numberOfDiscountCard;
+    }
+
+    public short getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(short discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
     @Override
@@ -24,19 +32,19 @@ public class DiscountCardDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DiscountCardDto that = (DiscountCardDto) o;
-        return numberOfDiscountCard == that.numberOfDiscountCard && Objects.equals(idDiscountCard, that.idDiscountCard);
+        return numberOfDiscountCard == that.numberOfDiscountCard && discountAmount == that.discountAmount;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idDiscountCard, numberOfDiscountCard);
+        return Objects.hash(numberOfDiscountCard, discountAmount);
     }
 
     @Override
     public String toString() {
         return "DiscountCardDto{" +
-               "idDiscountCard=" + idDiscountCard +
                ", numberOfDiscountCard=" + numberOfDiscountCard +
+               ", discountAmount=" + discountAmount +
                '}';
     }
 }

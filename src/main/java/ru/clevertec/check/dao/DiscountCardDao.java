@@ -6,6 +6,8 @@ import ru.clevertec.check.exception.DaoException;
 import ru.clevertec.check.util.JdbcConnectionManager;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DiscountCardDao implements CrudDiscountCard<DiscountCard, Long, Integer> {
@@ -37,6 +39,12 @@ public class DiscountCardDao implements CrudDiscountCard<DiscountCard, Long, Int
             discount_percent
             FROM discount_card
             WHERE number_discount_card = ?
+            """;
+    private static final String FIND_ALL = """
+            SELECT id_discount_card,
+            number_discount_card,
+            discount_percent
+            FROM discount_card
             """;
 
     private DiscountCardDao() {
@@ -118,6 +126,27 @@ public class DiscountCardDao implements CrudDiscountCard<DiscountCard, Long, Int
             throw new DaoException(e);
         }
     }
+
+    @Override
+    public List<DiscountCard> allCard() {
+        try (var connection = JdbcConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(FIND_ALL)) {
+            var resultSet = preparedStatement.executeQuery();
+            ArrayList<DiscountCard> allCard = new ArrayList<>();
+            while (resultSet.next()) {
+                DiscountCard discountCard = new DiscountCardBuilder().builder()
+                        .setId(resultSet.getLong("id_discount_card"))
+                        .setNumberCard(resultSet.getInt("number_discount_card"))
+                        .setAmount(resultSet.getShort("discount_percent"))
+                        .build();
+                allCard.add(discountCard);
+            }
+            return allCard;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
 
     public static DiscountCardDao getInstance() {
         return CARD_DAO;

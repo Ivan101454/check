@@ -5,6 +5,7 @@ import ru.clevertec.check.dao.CrudProductInStock;
 import ru.clevertec.check.dao.DiscountCardDao;
 import ru.clevertec.check.dao.ProductInStockDao;
 import ru.clevertec.check.entity.*;
+import ru.clevertec.check.service.DiscountCardService;
 import ru.clevertec.check.util.*;
 
 import java.io.*;
