@@ -1,5 +1,6 @@
 package ru.clevertec.check.servlet;
 
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,41 +10,50 @@ import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.http.dto.DiscountCardDto;
 import ru.clevertec.check.service.DiscountCardService;
 import ru.clevertec.check.service.IDiscountCardService;
+import ru.clevertec.check.util.ConnectionManager;
+import ru.clevertec.check.util.JdbcConnectionManager;
+import ru.clevertec.check.util.PropertiesUtil;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.Optional;
+
 
 @WebServlet("/discount")
 public class DiscountCardServlet extends HttpServlet {
-    private final DiscountCardService discountCardService = DiscountCardService.getInstance();
+    IDiscountCardService discountCardService = DiscountCardService.getInstance();
+
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        PropertiesUtil.getINIT();
+        JdbcConnectionManager.getINIT();
+        super.init(config);
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<DiscountCardDto> all = discountCardService.findAll();
         resp.setContentType("text/html");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         try (var writer = resp.getWriter()) {
-            writer.write("<h1>Hello from First Servlet</h2>");
-        }
-        try(var writer = resp.getWriter();) {
-            while (all.listIterator().hasNext()) {
-                writer.write("<h1>Список скидочных карт</h1>");
-                writer.write("<ul>");
-                all.forEach(cardDto -> {
-                    writer.write("""
-                    <li>
-                        <a href="card?cardNumber=%d">Скидка %s</a>
-                    </li>
-                    """.formatted(cardDto.getNumberOfDiscountCard(), cardDto.getDiscountAmount()));
-                });
-            }
+            writer.write("<h3>Дисконтная карта</h3>");
+            discountCardService.findAll().forEach(cardDto -> {
+                writer.write("""
+                        <p>__________________________________________</p>
+                        <div>cardNumber = %d</div>
+                        <div>cardNumber = %d %%</div>
+                        </div>
+                        """.formatted(cardDto.getNumberOfDiscountCard(), cardDto.getDiscountAmount()));
+            });
             writer.write("</ul>");
         }
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        super.doPost(req, resp);
-//    }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
 }
+
+
+

@@ -23,10 +23,6 @@ public class DiscountCardService implements IDiscountCardService {
         return INSTANCE;
     }
 
-    Optional findByNumber(Integer number) {
-        return crudDiscountCard.findByNumber(number);
-    }
-
     @Override
     public void addDiscountCart(DiscountCardDto discountCardDto) {
         crudDiscountCard.save(new DiscountCardBuilder()
@@ -37,11 +33,12 @@ public class DiscountCardService implements IDiscountCardService {
     }
 
     @Override
-    public Optional<DiscountCardDto> findByNumber() {
-        return Optional.empty();
+    public Optional<DiscountCardDto> findByNumber(Integer number) {
+        Optional<DiscountCard> byNumber = crudDiscountCard.findByNumber(number);
+        return Optional.of(new DiscountCardDto(byNumber.get().getNumberOfDiscountCard(),
+                byNumber.get().getDiscountAmount()));
     }
     public List<DiscountCardDto> findAll() {
-
         return  crudDiscountCard.allCard().stream()
                 .map(card -> new DiscountCardDto(
                         card.getNumberOfDiscountCard(),

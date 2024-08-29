@@ -1,5 +1,6 @@
 package ru.clevertec.check.util;
 
+import lombok.Getter;
 import ru.clevertec.check.exception.CustomException;
 import ru.clevertec.check.exception.TextErrorException;
 import ru.clevertec.check.exception.WriteError;
@@ -23,16 +24,28 @@ public final class JdbcConnectionManager {
     private static BlockingQueue<Connection> pool;
     private static List<Connection> sourceConnections;
     private static final Integer DEFAULT_POOL_SIZE = 10;
+    @Getter
+    private static final String INIT = "START";
 
     static {
+        loadDriver();
         initConnectionPool();
+        System.out.println("JDBC");
+    }
+
+    public static void loadDriver() {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private JdbcConnectionManager() {
     }
 
-    private static void initConnectionPool() {
-        var poolSize = PropertiesUtil.getProperties(POOL_SIZE_KEY);
+    public static void initConnectionPool() {
+        var poolSize = PropertiesUtil.get(POOL_SIZE_KEY);
         var size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
         pool = new ArrayBlockingQueue<>(size);
         sourceConnections = new ArrayList<>(size);
@@ -55,12 +68,12 @@ public final class JdbcConnectionManager {
         }
     }
 
-    private static Connection open() {
+    public static Connection open() {
         try {
             return DriverManager.getConnection(
-                    PropertiesUtil.getProperties(URL_KEY),
-                    PropertiesUtil.getProperties(USERNAME_KEY),
-                    PropertiesUtil.getProperties(PASSWORD_KEY));
+                    PropertiesUtil.get(URL_KEY),
+                    PropertiesUtil.get(USERNAME_KEY),
+                    PropertiesUtil.get(PASSWORD_KEY));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

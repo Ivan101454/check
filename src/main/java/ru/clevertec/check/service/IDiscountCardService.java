@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface IDiscountCardService {
     public void addDiscountCart(DiscountCardDto discountCardDto);
-    public Optional<DiscountCardDto> findByNumber();
+    public Optional<DiscountCardDto> findByNumber(Integer number);
+    public List<DiscountCardDto> findAll();
 }

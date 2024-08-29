@@ -43,7 +43,7 @@ public class DiscountCardDto {
     @Override
     public String toString() {
         return "DiscountCardDto{" +
-               ", numberOfDiscountCard=" + numberOfDiscountCard +
+               "numberOfDiscountCard=" + numberOfDiscountCard +
                ", discountAmount=" + discountAmount +
                '}';
     }

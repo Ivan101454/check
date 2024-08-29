@@ -3,6 +3,7 @@ package ru.clevertec.check.dao;
 import ru.clevertec.check.builder.DiscountCardBuilder;
 import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.exception.DaoException;
+import ru.clevertec.check.util.ConnectionManager;
 import ru.clevertec.check.util.JdbcConnectionManager;
 
 import java.sql.*;
@@ -41,9 +42,7 @@ public class DiscountCardDao implements CrudDiscountCard<DiscountCard, Long, Int
             WHERE number_discount_card = ?
             """;
     private static final String FIND_ALL = """
-            SELECT id_discount_card,
-            number_discount_card,
-            discount_percent
+            SELECT *
             FROM discount_card
             """;
 

@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="check.main:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/check_main_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="check.main" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: org.postgresql:postgresql:42.7.3" />
+          <element id="library" level="project" name="Gradle: org.checkerframework:checker-qual:3.42.0" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="check.main/web/Web" />
+    </root>
+  </artifact>
+</component>

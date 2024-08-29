@@ -5,20 +5,22 @@ import ru.clevertec.check.dao.CrudProductInStock;
 import ru.clevertec.check.dao.DiscountCardDao;
 import ru.clevertec.check.dao.ProductInStockDao;
 import ru.clevertec.check.entity.*;
+import ru.clevertec.check.http.dto.DiscountCardDto;
 import ru.clevertec.check.service.DiscountCardService;
 import ru.clevertec.check.util.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class CheckRunner {
+
     public static void main(String[] args) throws IOException {
         args = "3-1 2-1 2-1 5-1 2-3 discountCard=1111 balanceDebitCard=100 saveToFile=result.csv datasource.url=jdbc:postgresql://localhost:5432/check datasource.username=postgres datasource.password=postgres".split(" ");
 
         InputHandler inputHandler = InputHandler.getInstance();
         inputHandler.handler(args);
-        PropertiesUtil.loadProperties();
         CrudProductInStock crudProductInStock = ProductInStockDao.getProductDao();
         CrudDiscountCard crudDiscountCard = DiscountCardDao.getInstance();
 
