@@ -1,7 +1,9 @@
 package ru.clevertec.check.http.dto;
 
-import java.util.Objects;
+import lombok.Builder;
 
+import java.util.Objects;
+@Builder
 public class DiscountCardDto {
     private int numberOfDiscountCard;
     private short discountAmount;

@@ -22,6 +22,7 @@ import java.util.Optional;
 @WebServlet("/discount")
 public class DiscountCardServlet extends HttpServlet {
     IDiscountCardService discountCardService = DiscountCardService.getInstance();
+    String number = "1111";
 
 
     @Override
@@ -35,12 +36,28 @@ public class DiscountCardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        String number = req.getParameter("number");
-        Optional<DiscountCardDto> cardDto = discountCardService.findByNumber(Integer.parseInt(number));
-        req.setAttribute("discount", cardDto.get());
+        Optional<DiscountCardDto> cardDto = discountCardService.
+                findByNumber(Integer.parseInt(number));
+        if (cardDto.isPresent()) {
+            req.setAttribute("discount", cardDto.get());
+        }
         req.getRequestDispatcher(JspHelper.getPath("discount")).forward(req, resp);
     }
-//        try (var writer = resp.getWriter()) {
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        number = req.getParameter("number");
+        resp.sendRedirect("/discount");
+    }
+
+
+//    @Override
+//    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String card = req.getParameter("card");
+//
+//    }
+    //        try (var writer = resp.getWriter()) {
 //            writer.write("<h3>Дисконтная карта</h3>");
 //            discountCardService.findAll().forEach(cardDto -> {
 //                writer.write("""

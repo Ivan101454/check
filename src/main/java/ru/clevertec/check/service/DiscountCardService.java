@@ -1,7 +1,6 @@
 package ru.clevertec.check.service;
 
 import ru.clevertec.check.builder.DiscountCardBuilder;
-import ru.clevertec.check.dao.CrudDiscountCard;
 import ru.clevertec.check.dao.DiscountCardDao;
 import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.http.dto.DiscountCardDto;
@@ -24,12 +23,15 @@ public class DiscountCardService implements IDiscountCardService {
     }
 
     @Override
-    public void addDiscountCart(DiscountCardDto discountCardDto) {
-        crudDiscountCard.save(new DiscountCardBuilder()
+    public boolean addDiscountCart(DiscountCardDto discountCardDto) {
+        DiscountCard addCard = crudDiscountCard.save(new DiscountCardBuilder()
                 .builder()
-                        .setNumberCard(discountCardDto.getNumberOfDiscountCard())
-                        .setAmount(discountCardDto.getDiscountAmount())
+                .setNumberCard(discountCardDto.getNumberOfDiscountCard())
+                .setAmount(discountCardDto.getDiscountAmount())
                 .build());
+        if(addCard == null) {
+            return false;
+        } else return true;
     }
 
     @Override
