@@ -10,8 +10,8 @@ import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.http.dto.DiscountCardDto;
 import ru.clevertec.check.service.DiscountCardService;
 import ru.clevertec.check.service.IDiscountCardService;
-import ru.clevertec.check.util.ConnectionManager;
 import ru.clevertec.check.util.JdbcConnectionManager;
+import ru.clevertec.check.util.JspHelper;
 import ru.clevertec.check.util.PropertiesUtil;
 
 import java.io.IOException;
@@ -35,25 +35,25 @@ public class DiscountCardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        try (var writer = resp.getWriter()) {
-            writer.write("<h3>Дисконтная карта</h3>");
-            discountCardService.findAll().forEach(cardDto -> {
-                writer.write("""
-                        <p>__________________________________________</p>
-                        <div>cardNumber = %d</div>
-                        <div>cardNumber = %d %%</div>
-                        </div>
-                        """.formatted(cardDto.getNumberOfDiscountCard(), cardDto.getDiscountAmount()));
-            });
-            writer.write("</ul>");
-        }
+        String number = req.getParameter("number");
+        Optional<DiscountCardDto> cardDto = discountCardService.findByNumber(Integer.parseInt(number));
+        req.setAttribute("discount", cardDto.get());
+        req.getRequestDispatcher(JspHelper.getPath("discount")).forward(req, resp);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
-    }
+//        try (var writer = resp.getWriter()) {
+//            writer.write("<h3>Дисконтная карта</h3>");
+//            discountCardService.findAll().forEach(cardDto -> {
+//                writer.write("""
+//                        <p>__________________________________________</p>
+//                        <div>cardNumber = %d</div>
+//                        <div>cardNumber = %d %%</div>
+//                        </div>
+//                        """.formatted(cardDto.getNumberOfDiscountCard(), cardDto.getDiscountAmount()));
+//            });
+//            writer.write("</ul>");
 }
+
+
 
 
 

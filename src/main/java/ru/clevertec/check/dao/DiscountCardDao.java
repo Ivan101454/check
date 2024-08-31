@@ -3,7 +3,6 @@ package ru.clevertec.check.dao;
 import ru.clevertec.check.builder.DiscountCardBuilder;
 import ru.clevertec.check.entity.DiscountCard;
 import ru.clevertec.check.exception.DaoException;
-import ru.clevertec.check.util.ConnectionManager;
 import ru.clevertec.check.util.JdbcConnectionManager;
 
 import java.sql.*;
