@@ -1,5 +1,6 @@
 package ru.clevertec.check;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.clevertec.check.dao.CrudDiscountCard;
 import ru.clevertec.check.dao.CrudProductInStock;
 import ru.clevertec.check.dao.DiscountCardDao;
@@ -17,24 +18,29 @@ import java.util.Scanner;
 public class CheckRunner {
 
     public static void main(String[] args) throws IOException {
-        args = "3-1 2-1 2-1 5-1 2-3 discountCard=1111 balanceDebitCard=100 saveToFile=result.csv datasource.url=jdbc:postgresql://localhost:5432/check datasource.username=postgres datasource.password=postgres".split(" ");
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        DiscountCardService discount = context.getBean("disc", DiscountCardService.class);
+        System.out.println(discount.findByNumber(1111).toString());
 
-        InputHandler inputHandler = InputHandler.getInstance();
-        inputHandler.handler(args);
-        CrudProductInStock crudProductInStock = ProductInStockDao.getProductDao();
-        CrudDiscountCard crudDiscountCard = DiscountCardDao.getInstance();
+
+//        args = "3-1 2-1 2-1 5-1 2-3 discountCard=1111 balanceDebitCard=100 saveToFile=result.csv datasource.url=jdbc:postgresql://localhost:5432/check datasource.username=postgres datasource.password=postgres".split(" ");
+//
+//        InputHandler inputHandler = InputHandler.getInstance();
+//        inputHandler.handler(args);
+//        CrudProductInStock crudProductInStock = ProductInStockDao.getProductDao();
+//        CrudDiscountCard crudDiscountCard = DiscountCardDao.getInstance();
 
 //        checkData(inputHandler);
 
 
-        Check check;
-        if (inputHandler.getDiscount() != null) {
-            check = new ConcreteCheckWithDiscount(inputHandler, crudDiscountCard, crudProductInStock);
-        } else check = new ConcreteCheckWithoutDiscount(inputHandler, crudProductInStock);
-        check.order();
-        CheckPresentation checkPresentation = new CheckPresentation(check);
-        checkPresentation.writeToFile(inputHandler.getSaveToFile());
-        System.out.println(checkPresentation.toString());
+//        Check check;
+//        if (inputHandler.getDiscount() != null) {
+//            check = new ConcreteCheckWithDiscount(inputHandler, crudDiscountCard, crudProductInStock);
+//        } else check = new ConcreteCheckWithoutDiscount(inputHandler, crudProductInStock);
+//        check.order();
+//        CheckPresentation checkPresentation = new CheckPresentation(check);
+//        checkPresentation.writeToFile(inputHandler.getSaveToFile());
+//        System.out.println(checkPresentation.toString());
 
 
     }

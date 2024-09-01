@@ -26,7 +26,7 @@ public final class JdbcConnectionManager {
     private static final Integer DEFAULT_POOL_SIZE = 10;
     @Getter
     private static final String INIT = "START";
-
+//
     static {
         loadDriver();
         initConnectionPool();
@@ -42,6 +42,9 @@ public final class JdbcConnectionManager {
     }
 
     private JdbcConnectionManager() {
+//        loadDriver();
+//        initConnectionPool();
+//        System.out.println("JDBC");
     }
 
     public static void initConnectionPool() {

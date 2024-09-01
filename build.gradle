@@ -22,6 +22,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
     implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    implementation 'org.springframework:spring-core:6.1.12'
+    // https://mvnrepository.com/artifact/org.springframework/spring-context
+    implementation 'org.springframework:spring-context:6.1.12'
+
+
 
 
     // https://mvnrepository.com/artifact/org.postgresql/postgresql

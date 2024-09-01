@@ -12,10 +12,14 @@ import static java.util.stream.Collectors.toList;
 
 public class DiscountCardService implements IDiscountCardService {
     private static final DiscountCardService INSTANCE = new DiscountCardService();
-    private final DiscountCardDao crudDiscountCard = DiscountCardDao.getInstance();
+    private DiscountCardDao crudDiscountCard;
 
     private DiscountCardService() {
 
+    }
+
+    private DiscountCardService(DiscountCardDao crudDiscountCard) {
+        this.crudDiscountCard = DiscountCardDao.getInstance();
     }
 
     public static DiscountCardService getInstance() {

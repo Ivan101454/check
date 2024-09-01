@@ -6,28 +6,37 @@ import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.util.Properties;
-@UtilityClass
+
 public final class PropertiesUtil {
 
     @Getter
-    private static final Properties PROPERTIES = new Properties();
+    private static Properties properties;
     @Getter
     private static final String INIT = "START";
 
 
-    static {
+//    static {
+//        loadProperties();
+//    }
+    private PropertiesUtil() {
+
+    }
+
+    private PropertiesUtil(Properties properties) {
+        PropertiesUtil.properties = properties;
         loadProperties();
     }
 
+
     private static void loadProperties() {
         try (var inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
-            PROPERTIES.load(inputStream);
+            properties.load(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static String get(String key) {
-        return PROPERTIES.getProperty(key);
+        return properties.getProperty(key);
     }
 }

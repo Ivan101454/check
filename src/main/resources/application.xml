@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="discountCardService" name="disc" class="ru.clevertec.check.service.DiscountCardService">
+        <constructor-arg type="ru.clevertec.check.dao.DiscountCardDao" ref="ddao"/>
+    </bean>
+    <bean id="discountCardDao" name="ddao" class="ru.clevertec.check.dao.DiscountCardDao"/>
+    <bean id="propertiesUtil" class="ru.clevertec.check.util.PropertiesUtil">
+        <constructor-arg ref="prop"/>
+    </bean>
+    <bean id="jdbcConnectionManager" name="jdbc" class="ru.clevertec.check.util.JdbcConnectionManager"/>
+    <bean id="properties" name="prop" class="java.util.Properties"/>
+</beans>

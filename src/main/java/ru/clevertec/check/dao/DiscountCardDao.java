@@ -49,6 +49,7 @@ public class DiscountCardDao implements CrudDiscountCard<DiscountCard, Long, Int
 
     }
 
+
     public Optional<DiscountCard> findByNumber(Integer id) {
         try (var connection = JdbcConnectionManager.get();
              var preparedStatement = connection.prepareStatement(FIND_BY_NUMBER)) {
